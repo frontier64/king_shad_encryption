@@ -1,3 +1,11 @@
+/**
+ * Title: algorithm.cpp
+ * Author: Kixo
+ * About: encryption and decryption algorithm for king_encrypt/decrypt
+ * For: CSE 539. First Assignment
+ * Date: 1/25/2017
+ **/
+
 #include <stdlib.h>
 
 

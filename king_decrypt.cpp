@@ -1,22 +1,21 @@
 /**
  * Title: king_encrypt.cc
  * Author: Kixo
- * About: encrypt a file using a block cipher and a 32 bit key. 
+ * About: decrypt a file using a block cipher and a 32 bit key. 
  Given the plaintext and ciphertext the key itself should not be easily revealed.
-  * For: CSE 539. First assignment
-  * Date: January 22, 2017
-  **/
+ * For: CSE 539. First assignment
+ * Date: January 25, 2017
+ **/
 
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
 #include <string.h>
 #include <stdint.h>
+#include "algorithm.cpp"
 
 using namespace std;
 
-uint32_t encrypt_block(uint32_t input, uint32_t key);
-uint32_t decrypt_block(uint32_t input, uint32_t key);
 
 uint32_t KEY;
 
@@ -63,16 +62,3 @@ int main(int argc, char **argv){
     plaintext.close();
 }
 
-
-
-uint32_t decrypt_block(uint32_t input, uint32_t key){
-    return input ^ key;
-}
-
-
-
-/*
-uint32_t decrypt_block(uint32_t input, uint32_t key){
-    return input ^ key;
-}
-*/

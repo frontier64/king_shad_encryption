@@ -20,19 +20,25 @@
 
 uint32_t encryption_round(uint32_t input, uint32_t key){
     uint32_t reversed_key = 0;
-    uint32_t temp_key = key;
     int i;
     for (i = 0; i < 32; i++){
         reversed_key = reversed_key << 1;
-        reversed_key += temp_key % 2;
-        temp_key = temp_key >> 1;
+        reversed_key += (key >> i) % 2;
     }
     uint32_t f_key = key ^ reversed_key;
 //Reverse and xor key done.
 
-
     uint32_t rounded = f_key ^ input;
-    
+
+////Do the circular shifting on each block of 4 bits
+//We are right shifting the 4 bit blocks based on the f_key.
+    uint32_t temp;
+    short amount_to_rotate;
+    for (i = 0; i < 32; i *= 4){
+        temp = (rounded >> i) << (28 - i);
+        amount_to_rotate = (f_key >> i) % 4;
+        rounded = rounded - temp + ((temp << amount_to_rotate) + temp >> (4 - amount_to_rotate));
+    }    
 
 
 }

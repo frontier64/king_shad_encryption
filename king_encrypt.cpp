@@ -21,8 +21,9 @@ using namespace std;
 uint32_t KEY;
 
 
+
 int main(int argc, char ** argv){
-    uint32_t test = atoi(argv[1]);
+    uint32_t test = stol(argv[1], 0, 16);
     cout << encryption_round(test, test) << endl;
     return 0;
 }

@@ -7,6 +7,8 @@
  * Date: January 22, 2017
  **/
 
+
+
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
@@ -18,7 +20,14 @@ using namespace std;
 
 uint32_t KEY;
 
-int main(int argc, char **argv){
+
+int main(int argc, char ** argv){
+    uint32_t test = atoi(argv[1]);
+    cout << encryption_round(test, test) << endl;
+    return 0;
+}
+
+int temp(int argc, char **argv){
 
     if (argc != 4){
         cout << "Incorrect # of arguments.";

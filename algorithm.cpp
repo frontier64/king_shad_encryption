@@ -15,14 +15,30 @@
   obviously if the key is 0000 then you fail. maybe 0 represents one transformation and 1 represents a different transformation. I like it
 **/
 
+
 #include <stdlib.h>
 
 uint32_t encryption_round(uint32_t input, uint32_t key){
+    uint32_t reversed_key = 0;
+    uint32_t temp_key = key;
+    int i;
+    for (i = 0; i < 32; i++){
+        reversed_key = reversed_key << 1;
+        reversed_key += temp_key % 2;
+        temp_key = temp_key >> 1;
+    }
+    uint32_t f_key = key ^ reversed_key;
+//Reverse and xor key done.
+
+
+    uint32_t rounded = f_key ^ input;
     
+
+
 }
 
 uint32_t encrypt_block(uint32_t input, uint32_t key){
-    
+    return input ^ key;
 }
 
 

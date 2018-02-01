@@ -57,7 +57,6 @@ int main(int argc, char **argv){
     int i;
     while ((i = plaintext.read((char *)&first_bits, sizeof(first_bits)))){
 
-
         cipher_bits = encrypt_block(first_bits, KEY);
 
         ciphertext.write((char *)&cipher_bits, sizeof(cipher_bits));

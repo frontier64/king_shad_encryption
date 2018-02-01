@@ -44,7 +44,7 @@ int main(int argc, char **argv){
     uint32_t cipher_bits;
 
     int i;
-    while ((i = ciphertext.read((char *)&first_bits, sizeof(first_bits))) > 0){
+    while ((i = ciphertext.read((char *)&first_bits, sizeof(first_bits)))){
 
         //Output of the 4 characters treated. 
         cout << i << ": ";
@@ -54,9 +54,11 @@ int main(int argc, char **argv){
 
         plaintext.write((char *)&cipher_bits, sizeof(cipher_bits));
         first_bits = 0;
+        if (i == 0){
+            break;
+        }
     }
     cout << i << endl;
-    plaintext.write((char *)&first_bits, sizeof(first_bits));
 
     ciphertext.close();
     plaintext.close();

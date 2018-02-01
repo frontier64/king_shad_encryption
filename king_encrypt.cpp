@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string.h>
 #include <stdint.h>
+#include <iomanip>
 #include "algorithm.cpp"
 
 using namespace std;
@@ -22,13 +23,15 @@ uint32_t KEY;
 
 
 
-int main(int argc, char ** argv){
+int test(int argc, char ** argv){
     uint32_t test = stol(argv[1], 0, 16);
-    cout << encryption_round(test, test) << endl;
+    cout << encrypt_block(test, test) << endl;
+    cout << "Encrypetd block: " << hex << encrypt_block(test, test) << endl;
+    cout << "decrypted block: " << hex << decrypt_block(encrypt_block(test, test), test) << endl;
     return 0;
 }
 
-int temp(int argc, char **argv){
+int main(int argc, char **argv){
 
     if (argc != 4){
         cout << "Incorrect # of arguments.";
@@ -53,7 +56,7 @@ int temp(int argc, char **argv){
     uint32_t cipher_bits;
 
     int i;
-    while ((i = plaintext.read((char *)&first_bits, sizeof(first_bits))) > 0){
+    while ((i = plaintext.read((char *)&first_bits, sizeof(first_bits)))){
 
         //Output of the 4 characters treated. 
         cout << (char *) &first_bits << endl;
@@ -62,9 +65,13 @@ int temp(int argc, char **argv){
 
         ciphertext.write((char *)&cipher_bits, sizeof(cipher_bits));
         first_bits = 0;
+        if (i == 0){
+            break;
+        }
     }
+    cipher_bits = encrypt_block(first_bits, KEY);
+    ciphertext.write((char *)&cipher_bits, sizeof(cipher_bits));
 
-    ciphertext.write((char *)&first_bits, sizeof(first_bits));
     plaintext.close();
     ciphertext.close();
 }

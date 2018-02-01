@@ -23,7 +23,7 @@ uint32_t encryption_round(uint32_t input, uint32_t key){
     int i;
     for (i = 0; i < 32; i++){
         reversed_key = reversed_key << 1;
-        reversed_key += (key >> i) % 2;
+        reversed_key += (key >> i) & 1;
     }
     uint32_t f_key = key ^ reversed_key;
 //Reverse and xor key done.
@@ -34,21 +34,62 @@ uint32_t encryption_round(uint32_t input, uint32_t key){
 //We are right shifting the 4 bit blocks based on the f_key.
     uint32_t temp;
     short amount_to_rotate;
-    for (i = 0; i < 32; i *= 4){
-        temp = (rounded >> i) << (28 - i);
-        amount_to_rotate = (f_key >> i) % 4;
-        rounded = rounded - temp + ((temp << amount_to_rotate) + temp >> (4 - amount_to_rotate));
+    for (i = 0; i < 32; i += 4){
+        temp = rounded & (0xf << i);
+        rounded = rounded - temp;
+        amount_to_rotate = (f_key >> i) & 3;
+        temp = ((temp >> amount_to_rotate) | (temp << (4-amount_to_rotate))) & (0xf << i);
+        rounded = rounded + temp;
     }    
-
+    return rounded;
 
 }
 
+uint32_t decryption_round(uint32_t input, uint32_t key){
+    uint32_t reversed_key = 0;
+    int i;
+    for (i = 0; i < 32; i++){
+        reversed_key = reversed_key << 1;
+        reversed_key += (key >> i) & 1;
+    }
+    uint32_t f_key = key ^ reversed_key;
+
+
+    uint32_t temp;
+    short amount_to_rotate;
+    for (i = 0; i < 32; i += 4){
+        temp = input & (0xf << i);
+        input = input - temp;
+        amount_to_rotate = (f_key >> i) & 3;
+        temp = ((temp << amount_to_rotate) | (temp >> (4-amount_to_rotate))) & (0xf << i);
+        input = input + temp;
+    }    
+    uint32_t un_rounded = f_key ^ input;
+
+    return un_rounded;
+}
+
+
 uint32_t encrypt_block(uint32_t input, uint32_t key){
-    return input ^ key;
+    uint32_t current_key = key;
+    int i;
+    for (i = 0; i < 32; i++){
+        input = encryption_round(input, current_key);
+        current_key = (current_key >> 1) | (current_key << 31);
+
+    }
+    return input;
 }
 
 
 uint32_t decrypt_block(uint32_t input, uint32_t key){
-    return input ^ key;
+    uint32_t current_key = (key >> 31) | (key << 1);
+    int i;
+    for (i = 0; i < 32; i++){
+        input = decryption_round(input, current_key);
+        current_key = (current_key << 1) | (current_key >> 31);
+
+    }
+    return input;
 }
 

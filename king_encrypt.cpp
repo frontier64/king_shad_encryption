@@ -32,7 +32,6 @@ int test(int argc, char ** argv){
 }
 
 int main(int argc, char **argv){
-
     if (argc != 4){
         cout << "Incorrect # of arguments.";
         exit(1);
@@ -49,7 +48,7 @@ int main(int argc, char **argv){
         cout << "Input file does not exist.";
         exit(1);
     }
-
+    cout << "Running on " << argv[2] << endl;
     ciphertext.open(argv[3], fstream::out | fstream::binary);
 
     uint32_t first_bits;
@@ -58,8 +57,6 @@ int main(int argc, char **argv){
     int i;
     while ((i = plaintext.read((char *)&first_bits, sizeof(first_bits)))){
 
-        //Output of the 4 characters treated. 
-        cout << (char *) &first_bits << endl;
 
         cipher_bits = encrypt_block(first_bits, KEY);
 
@@ -74,5 +71,7 @@ int main(int argc, char **argv){
 
     plaintext.close();
     ciphertext.close();
+
+    cout << "Wrote into " << argv[3] << endl;
 }
 

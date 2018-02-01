@@ -37,6 +37,7 @@ int main(int argc, char **argv){
         cout << "Input file does not exist.";
         exit(1);
     }
+    cout << "Running on " << argv[2] << endl;
 
     plaintext.open(argv[3], fstream::out | fstream::binary);
 
@@ -47,8 +48,6 @@ int main(int argc, char **argv){
     while ((i = ciphertext.read((char *)&first_bits, sizeof(first_bits)))){
 
         //Output of the 4 characters treated. 
-        cout << i << ": ";
-        cout << (char *) &first_bits << endl;
 
         cipher_bits = decrypt_block(first_bits, KEY);
 
@@ -58,9 +57,10 @@ int main(int argc, char **argv){
             break;
         }
     }
-    cout << i << endl;
 
     ciphertext.close();
     plaintext.close();
+    cout << "Wrote into " << argv[3] << endl;
+
 }
 
